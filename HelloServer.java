@@ -6,18 +6,38 @@ import org.omg.CORBA.*;
 import org.omg.PortableServer.*;
 import org.omg.PortableServer.POA;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
+
+
 
 class HelloImpl extends HelloPOA {
   private ORB orb;
+  private Map<String, String> HelloMap = new HashMap<String, String>();
+  private Map<String, String> goodbyeMap = new HashMap<String, String>();
+
 
   public void setORB(ORB orb_val) {
     orb = orb_val; 
+    HelloMap.put("English", "Hello world");
+    HelloMap.put("Spanish", "Hola mundo");
+    HelloMap.put("French",  "Bonjour monde");
+    HelloMap.put("German", "Hallo Welt");
+    HelloMap.put("Italian", "Ciao mondo");
+    goodbyeMap.put("English", "Goodbye");
+    goodbyeMap.put("Spanish", "Adios");
+    goodbyeMap.put("French",  "Au revoir");
+    goodbyeMap.put("German", "Auf Wiedersehen");
+    goodbyeMap.put("Italian", "Arrivederci");
   }
     
   // implement sayHello() method
-  public String sayHello() {
-    return "\nHello world !!\n";
+  public String sayHello(String name) {
+    return HelloMap.get(name);
+  }
+  public String sayBye(String name) {
+    return goodbyeMap.get(name);
   }
     
   // implement shutdown() method
@@ -48,7 +68,7 @@ public class HelloServer {
           
       // get the root naming context
       org.omg.CORBA.Object objRef =
-          orb.resolve_initial_references("NameService");
+          orb.resolve_initial_references("RootPOA");
       // Use NamingContextExt which is part of the Interoperable
       // Naming Service (INS) specification.
       NamingContextExt ncRef = NamingContextExtHelper.narrow(objRef);
